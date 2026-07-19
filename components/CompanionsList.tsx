@@ -1,10 +1,61 @@
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn, getSubjectColor } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
 
-const CompanionsList = () => {
-  return (
-    <div>
-      CompanionsList
-    </div>
-  )
+interface CompanionListsProps {
+  title: string;
+  companions?: Companion[];
+  className?: string;
 }
 
-export default CompanionsList
+const CompanionsList = ({
+  title,
+  companions,
+  className,
+}: CompanionListsProps) => {
+  return (
+    <article className={cn("companions-list", className)}>
+      <h2 className="font-bold text-3xl">Recent Sessions</h2>
+      <Table>
+        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-lg w-2/3">Lessons</TableHead>
+            <TableHead className="text-lg">Subject</TableHead>
+            <TableHead className="text-lg">Duration</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {companions?.map(({id, subject, name, topic, duration}) => (
+            <TableRow key={id}>
+              <TableCell>
+                <Link href={`/companion/${id}`}>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center size-[72px] rounded-lg max-md:hidden" style={{ backgroundColor: getSubjectColor(subject) }}>
+                      <Image src={`/icons/${subject}.svg`} alt={subject} width={35} height={35} />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <p className="font-bold text-2xl">{name}</p>
+                      <p className="text-lg">{topic}</p>
+                    </div>
+                  </div>
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </article>
+  );
+};
+
+export default CompanionsList;
