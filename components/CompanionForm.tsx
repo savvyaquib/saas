@@ -6,15 +6,29 @@ import { z } from "zod";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
-  description: z.string().min(1, { message: "Description is required" }),
   subject: z.string().min(1, { message: "Subject is required" }),
   voice: z.string().min(1, { message: "Voice is required" }),
+  topic: z.string().min(1, { message: "Topic is required" }),
+  style: z.string().min(1, { message: "Style is required" }),
+  duration: z.number().min(1, { message: "Duration is required" }),
 });
 
 const CompanionForm = () => {
-  const form = useForm({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      subject: "",
+      voice: "",
+      topic: "",
+      style: "",
+      duration: 15,
+    },
   });
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+  };
 
   return <div>CompanionForm</div>;
 };
